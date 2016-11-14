@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Parser Demo</title>
+    <style>
+      div, textarea, span { font: 12px 'Heltevica', Arial, sans-serif; }
+      #panel, #target { width: 400px; margin: 20px auto; padding: 10px; border: 1px #ddd solid; }
+      #html-template { width: 98%; height: 150px; }
+    </style>
+  </head>
+  <body>
+    <div id="panel">
+      <textarea id="html-template" placeholder="HTML String">
+<p>hello</p>
+<div>
+  <h2>
+    <small>world</small>
+  </h2>
+  <span>!</span>
+</div></textarea>
+      <div id="vdom-json"></div>
+      <button id="compile">Compile</button> Virtual DOM will be logged to console.
+    </div>
+    <div id="target">
+      <!-- render DOM content here -->
+    </div>
+    <script src="dist/bundle.js"></script>
+  </body>
+</html>
