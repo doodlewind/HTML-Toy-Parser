@@ -1,45 +1,41 @@
-let tokens, currIndex, lookahead
+let tokens;
+let currIndex = -1;
 
-function nextToken() {
-  return tokens[++currIndex]
+function html(){
+  let tree = {type:'<html>',val:null,children:[]};
+  tags(tree);
+  return tree;
 }
 
-function match(terminalType) {
-  if (lookahead && terminalType === lookahead.type) lookahead = nextToken()
-  else throw 'SyntaxError'
-}
-
-const NT = {
-  html() {
-    let dom = { type: 'html', val: null, children: [] }
-    return NT.tags(dom)
-  },
-  tags(currNode) {
-    while (lookahead) {
-      let tagNode = { type: lookahead.val, val: null, children: [] }
-      tagNode = NT.tag(tagNode)
-
-      currNode.children.push(tagNode)
-      if (lookahead && lookahead.type == 'TagClose') break
-    }
-    return currNode
-  },
-  tag(currNode) {
-    match('TagOpen')
-    if (lookahead.type == 'TagOpen') {
-      currNode = NT.tags(currNode)
-    } else {
-      currNode.val = lookahead.val
-      match('Value')
-    }
-    match('TagClose')
-    return currNode
+function tags(parentNode){
+  while(tokens[++currIndex]){
+    let currNode = {
+      type:null,
+      val:null,
+      children:[],
+    };
+    switch(tokens[currIndex].type){
+      case 'TagOpen':
+        currNode.type = tokens[currIndex].val;
+        parentNode.children.push(currNode);
+        tags(currNode);
+        break;
+      case 'Value':
+        parentNode.val = tokens[currIndex].val;
+        break;
+      case 'TagClose':
+        //parentNode.children.push(currNode);
+        return;
+      default:
+        throw new Error('SyntaxError');
+    } 
   }
 }
 
 export default {
-  parse(t) {
-    tokens = t, currIndex = 0, lookahead = tokens[currIndex]
-    return NT.html()
+  parse(t){
+    tokens = t; 
+    //currIndex = -1 ;
+    return html();
   }
 }
