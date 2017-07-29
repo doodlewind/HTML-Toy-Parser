@@ -1,32 +1,33 @@
 let tokens, currIndex, lookahead
 
-function nextToken() {
+function nextToken () {
   return tokens[++currIndex]
 }
 
-function match(terminalType) {
+function match (terminalType) {
   if (lookahead && terminalType === lookahead.type) lookahead = nextToken()
-  else throw 'SyntaxError'
+  else throw Error('SyntaxError')
 }
 
 const NT = {
-  html() {
+  html () {
     let dom = { type: 'html', val: null, children: [] }
     return NT.tags(dom)
   },
-  tags(currNode) {
+  tags (currNode) {
+    /* eslint-disable no-unmodified-loop-condition */
     while (lookahead) {
       let tagNode = { type: lookahead.val, val: null, children: [] }
       tagNode = NT.tag(tagNode)
 
       currNode.children.push(tagNode)
-      if (lookahead && lookahead.type == 'TagClose') break
+      if (lookahead && lookahead.type === 'TagClose') break
     }
     return currNode
   },
-  tag(currNode) {
+  tag (currNode) {
     match('TagOpen')
-    if (lookahead.type == 'TagOpen') {
+    if (lookahead.type === 'TagOpen') {
       currNode = NT.tags(currNode)
     } else {
       currNode.val = lookahead.val
@@ -38,8 +39,10 @@ const NT = {
 }
 
 export default {
-  parse(t) {
-    tokens = t, currIndex = 0, lookahead = tokens[currIndex]
+  parse (t) {
+    tokens = t
+    currIndex = 0
+    lookahead = tokens[currIndex]
     return NT.html()
   }
 }

@@ -1,6 +1,6 @@
-function trim(str) { return str.replace(/^<|>$/g, '') }
+function trim (str) { return str.replace(/^<|>$/g, '') }
 
-function renderNode(target, nodes) {
+function renderNode (target, nodes) {
   nodes.forEach(node => {
     let newNode = document.createElement(trim(node.type))
     if (!node.val) newNode = renderNode(newNode, node.children)
@@ -10,7 +10,7 @@ function renderNode(target, nodes) {
   return target
 }
 
-function render(dom, targetId) {
+function render (dom, targetId) {
   let target = document.getElementById(targetId)
   target.innerHTML = ''
   renderNode(target, dom.children)
@@ -18,15 +18,15 @@ function render(dom, targetId) {
 
 export default {
   render,
-  initBrowser(lexer, parser) {
-    document.getElementById("compile").addEventListener("click", () => {
-      let template = document.getElementById("html-template").value
+  initBrowser (lexer, parser) {
+    document.getElementById('compile').addEventListener('click', () => {
+      let template = document.getElementById('html-template').value
       try {
         let tokens = lexer.lex(template)
         let dom = parser.parse(tokens)
         console.log(dom)
         render(dom, 'target')
-      } catch(e) { alert(e) }
+      } catch (e) { window.alert(e) }
     }, false)
   }
 }

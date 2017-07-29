@@ -23,7 +23,7 @@ export default {
       { type: 'TagOpen', val: '<span>' },
         { type: 'Value', val: '!' },
       { type: 'TagClose', val: '</span>' },
-    
+
     { type: 'TagClose', val: '</div>' }
   ],
   dom: {
