@@ -1,13 +1,25 @@
-function trim (str) { return str.replace(/^<|>$/g, '') }
+// 修改匹配所用正则
+function trim (str) {
+  return str.replace(/^<|>$/g, '').split(' ')[0]
+}
+function getClassName (str) {
+  const re = /class='(\w)+'/
+  if (re.test(str)) {
+    return str.match(re)[0].replace("class='", '').replace("'", '')
+  } else return null
+}
 
-function renderNode (target, nodes) {
+// 添加 className 至渲染属性中
+function renderNode ($target, nodes) {
   nodes.forEach(node => {
+    const className = getClassName(node.type)
     let newNode = document.createElement(trim(node.type))
+    if (className) newNode.classList.add(className)
     if (!node.val) newNode = renderNode(newNode, node.children)
-    else newNode.innerHTML = node.val
-    target.appendChild(newNode)
+    else newNode.innerText = node.val
+    $target.appendChild(newNode)
   })
-  return target
+  return $target
 }
 
 function render (dom, targetId) {
@@ -23,9 +35,8 @@ export default {
       let template = document.getElementById('html-template').value
       try {
         let tokens = lexer.lex(template)
-        let dom = parser.parse(tokens)
-        console.log(dom)
-        render(dom, 'target')
+        let ast = parser.parse(tokens)
+        render(ast, 'target')
       } catch (e) { window.alert(e) }
     }, false)
   }

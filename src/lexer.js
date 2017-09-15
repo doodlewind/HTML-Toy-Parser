@@ -1,5 +1,6 @@
 const TagClose = new RegExp(/^<\/[\w]+>/)
-const TagOpen = new RegExp(/^<[\w]+>/)
+// 匹配时需优化 TagOpen 表达式
+const TagOpen = new RegExp(/^<[\w]+(\s)?[^>]+>/)
 const Value = new RegExp(/^[^<]+/)
 
 function trim (str) {

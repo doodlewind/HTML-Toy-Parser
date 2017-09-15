@@ -43,6 +43,7 @@ export default {
     tokens = t
     currIndex = 0
     lookahead = tokens[currIndex]
-    return NT.html()
+    const html = NT.html()
+    return html
   }
 }
